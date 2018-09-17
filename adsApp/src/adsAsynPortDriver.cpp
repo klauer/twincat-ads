@@ -2871,6 +2871,13 @@ asynStatus adsAsynPortDriver::adsGetSymInfoByName(uint16_t amsPort,const char *v
 
   if (infoStatus) {
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s:%s: Get symbolic information failed for %s with: %s (0x%lx)\n", driverName, functionName,varName,adsErrorToString(infoStatus),infoStatus);
+
+    if (infoStatus == ADSERR_CLIENT_SYNCTIMEOUT) {
+      long status = AdsPortCloseEx(adsPort_);
+      asynPrint(pasynUserSelf, ASYN_TRACE_ERROR,
+                "%s:%s: AdsPortCloseEx()  %s (0x%lx)\n",
+                driverName, functionName, adsErrorToString(status),status);
+    }
     return asynError;
   }
 
